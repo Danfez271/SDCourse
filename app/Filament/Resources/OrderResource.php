@@ -6,6 +6,7 @@ use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Models\Order;
 use Filament\Forms;
+use Filament\Forms\Components;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -23,7 +24,34 @@ class OrderResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Components\Group::make()->schema([
+                    Components\Section::make('Order Information')->schema([
+                        Components\Select::make('user_id')
+                            ->Label('Customer')
+                            ->relationship('user', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->required(),
+
+                        Components\Select::make('paymet_method')
+                            ->options([
+                                'paypal' => 'PayPal',
+                                'stripe' => 'Stripe',
+                                'pago_movil' => 'Pago Móvil',
+                                'efectivo' => 'Efectivo',
+                            ])
+                            ->required(),
+
+                        Components\Select::make('payment_status')
+                            ->options([
+                                'pending' => 'Pending',
+                                'processing' => 'Processing',
+                                'completed' => 'Completed',
+                            ])
+
+
+                    ])
+                ])
             ]);
     }
 
